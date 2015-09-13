@@ -8,7 +8,7 @@ gem "activerecord"
 gem "sinatra-activerecord"
 gem "require_all" 
 gem "tilt-jbuilder", ">= 0.4.0", :require => "sinatra/jbuilder"
-
+gem 'rake'
 gem "thin"
 
 gem 'nfc', :git => 'git://github.com/pcarranzav/nfc.git', :ref => '15001c2'

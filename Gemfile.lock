@@ -46,6 +46,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rake (10.3.2)
     require_all (1.3.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -92,6 +93,7 @@ DEPENDENCIES
   dalli
   em-websocket
   nfc!
+  rake
   require_all
   rest-client
   sinatra

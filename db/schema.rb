@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131216003520) do
+ActiveRecord::Schema.define(version: 20141002192508) do
 
   create_table "admins", force: true do |t|
     t.string   "username"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20131216003520) do
     t.integer  "n_bottles"
     t.string   "ip"
     t.integer  "n_temperature_controls"
+    t.text     "ml_to_ms"
   end
 
   add_index "dispensers", ["online"], name: "index_dispensers_on_online"
