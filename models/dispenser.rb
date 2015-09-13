@@ -28,7 +28,7 @@ class Dispenser < ActiveRecord::Base
 		data['wine_names'] = []
 		data['wine_details'] = []
 		data['remaining_volumes'] = []
-		self.bottle_holders.each do |bh|
+		self.bottle_holders.reverse.each do |bh|
 			data['serving_options'][bh.dispenser_index] = {}
 
 			data['serving_options'][bh.dispenser_index]['low'] = {:price=>bh.serving_price_low,:volume=>bh.serving_volume_low}
