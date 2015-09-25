@@ -28,15 +28,15 @@ class Dispenser < ActiveRecord::Base
 		data['wine_names'] = []
 		data['wine_details'] = []
 		data['remaining_volumes'] = []
-		self.bottle_holders.reverse.each do |bh|
-			data['serving_options'][bh.dispenser_index] = {}
+		self.bottle_holders.reverse.each_with_index do |bh, index|
+			data['serving_options'][index] = {}
 
-			data['serving_options'][bh.dispenser_index]['low'] = {:price=>bh.serving_price_low,:volume=>bh.serving_volume_low}
-			data['serving_options'][bh.dispenser_index]['med'] = {:price=>bh.serving_price_med,:volume=>bh.serving_volume_med}
-			data['serving_options'][bh.dispenser_index]['high'] = {:price=>bh.serving_price_high,:volume=>bh.serving_volume_high}
-			data['wine_names'][bh.dispenser_index] = (bh.wine ? bh.wine.name : 'Vacio')
-			data['wine_details'][bh.dispenser_index] = (bh.wine ? bh.wine.variety + ' ' + bh.wine.vintage.to_s : '')
-			data['remaining_volumes'][bh.dispenser_index] = bh.remaining_volume
+			data['serving_options'][index]['low'] = {:price=>bh.serving_price_low,:volume=>bh.serving_volume_low}
+			data['serving_options'][index]['med'] = {:price=>bh.serving_price_med,:volume=>bh.serving_volume_med}
+			data['serving_options'][index]['high'] = {:price=>bh.serving_price_high,:volume=>bh.serving_volume_high}
+			data['wine_names'][index] = (bh.wine ? bh.wine.name : 'Vacio')
+			data['wine_details'][index] = (bh.wine ? bh.wine.variety + ' ' + bh.wine.vintage.to_s : '')
+			data['remaining_volumes'][index] = bh.remaining_volume
 		end
 
 		data['ml_to_ms'] = self.ml_to_ms
