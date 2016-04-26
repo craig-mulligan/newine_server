@@ -5,9 +5,9 @@ export PASSWD=${PASSWD:=root}
 echo "root:$PASSWD" | chpasswd
 #Spawn dropbear
 dropbear -E -F &
-echo BB-I2C1 > /sys/devices/platform/bone_capemgr/slots
+echo BB-I2C2 > /sys/devices/platform/bone_capemgr/slots
 
-chmod a+rw /dev/i2c-1
+chmod a+rw /dev/i2c-2
 daemon --chdir=/app --output=/app/thin.log -- /usr/bin/ruby run.rb
 daemon --respawn --chdir=/app --output=/app/nfc.log -- /usr/bin/rake2.1 nfc:work
 
