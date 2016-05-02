@@ -5,6 +5,8 @@ export PASSWD=${PASSWD:=root}
 echo "root:$PASSWD" | chpasswd
 #Spawn dropbear
 dropbear -E -F &
+dtc -O dtb -o /app/BB-I2C2-00A0.dtbo -b 0 -@ /app/BB-I2C2-00A0.dts
+mv /app/BB-I2C2-00A0.dtbo /lib/firmware
 echo BB-I2C2 > /sys/devices/platform/bone_capemgr/slots
 
 chmod a+rw /dev/i2c-2
