@@ -9,6 +9,7 @@ capybara-*.html
 /log/*
 /tmp/*
 /db/*.sqlite3
+/data
 /public/system/*
 /coverage/
 /spec/tmp/*
@@ -21,3 +22,4 @@ config/initializers/secret_token.rb
 newine.db
 *.log
 
+.DS_Store

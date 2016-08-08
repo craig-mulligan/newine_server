@@ -1,4 +1,3 @@
-
 require 'rubygems'
 require 'sinatra/activerecord/rake'
 require 'bundler/setup'
@@ -9,14 +8,12 @@ require 'will_paginate/active_record'
 
 require_all 'models'
 
-
 set :database, "sqlite3:///db/newine.sqlite3"
 
 class NewineServer < Sinatra::Application
 
 	options = { :namespace => "newine", :compress => false }
 	@@cache = Dalli::Client.new('localhost:11211', options)
-
 	def self.cache
 		@@cache
 	end
@@ -46,6 +43,19 @@ class NewineServer < Sinatra::Application
 					p 'Unrecognized format'
 			end
 		end
+
+		def boolean_humanize boolean
+			case boolean
+			when true
+				"Si"
+			else
+				'No'
+			end
+		end
+
+		def percentage_humanize percentage
+			percentage * 100
+		end
 	end
 
 	#get '/nfc' do
@@ -68,7 +78,7 @@ require_all 'controllers'
 def run_newine
 	EM.run do
 		$channel = EM::Channel.new
-	 
+
 		EventMachine::WebSocket.start(:host => '0.0.0.0', :port => 8080) do |ws|
 			ws.onopen {
 				sid = $channel.subscribe { |msg| ws.send msg }
@@ -109,7 +119,7 @@ def run_newine
 						d.configure rescue nil
 					end
 				end
-				sleep 30
+				sleep 1.minutes
 			end
 		end
 
