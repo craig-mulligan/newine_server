@@ -23,9 +23,7 @@ class NewineServer < Sinatra::Application
 	end
 
 	post '/dispensers' do
-		@dispenser = Dispenser.new(params[:dispenser])
-		@dispenser.ml_to_ms = Dispenser.default_ml_to_ms(@dispenser.n_bottles)
-		@dispenser.save
+		@dispenser = Dispenser.create(params[:dispenser])
 		p 'created dispenser'
 		if @dispenser.valid?
 			@dispenser.create_bottle_holders
@@ -143,26 +141,6 @@ class NewineServer < Sinatra::Application
 		@dispenser = @bottle_holder.dispenser
 		@dispenser.configure
 		jbuilder :'dispensers/show'
-	end
-
-	post '/dispensers/calibrate/:id.json' do
-		@dispenser = Dispenser.find(params[:id])
-
-		@dispenser.ml_to_ms = params[:ml_to_ms].values.map{|h| Hash[h.keys.zip(h.values.map(&:to_i))]}
-
-		p "New value:"
-		p @dispenser.ml_to_ms
-
-		@dispenser.save
-		@dispenser.configure
-
-		jbuilder :'dispensers/ml_to_ms'
-
-	end
-
-	get '/dispensers/calibrate/:id' do
-		@dispenser = Dispenser.find(params[:id])
-		erb :'dispensers/ml_to_ms'
 	end
 
 	post '/dispensers/temperature/:id.json' do

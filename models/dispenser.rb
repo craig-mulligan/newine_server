@@ -2,14 +2,8 @@ class Dispenser < ActiveRecord::Base
 	has_many :bottle_holders, :dependent => :destroy
 	has_many :temperature_controls, :dependent => :destroy
 
-	serialize :ml_to_ms, Array
-
 	validates :uid, :uniqueness => true
 	#after_save :create_bottle_holders, :on => :create
-
-	def self.default_ml_to_ms(n_bot)
-		[{'low' => 58, 'med' => 58, 'high' => 58}]*n_bot
-	end
 
 	def create_bottle_holders
 		self.n_bottles.times do |t|
@@ -39,8 +33,6 @@ class Dispenser < ActiveRecord::Base
 			data['remaining_volumes'][bh.dispenser_index] = bh.remaining_volume
 		end
 
-		data['ml_to_ms'] = self.ml_to_ms
-
 
 		data['temperatures'] = []
 
@@ -49,8 +41,6 @@ class Dispenser < ActiveRecord::Base
 		end
 
 		p data.to_json
-		p "Printing ip"
-		p self.ip
 		RestClient.post(self.ip + ':3001',data.to_json + "\n",:content_type => :json, :accept => :json)
 	end
 	def shutdown
