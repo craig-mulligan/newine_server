@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
 		when 'customer'
 			'Cliente'
 		when 'superclient'
-			'Cliente VIP'
+			'SuperCliente'
 		when 'employee'
 			'Empleado'
 		when 'manager'

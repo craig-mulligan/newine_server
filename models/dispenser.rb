@@ -2,14 +2,8 @@ class Dispenser < ActiveRecord::Base
 	has_many :bottle_holders, :dependent => :destroy
 	has_many :temperature_controls, :dependent => :destroy
 
-	serialize :ml_to_ms, Array
-
 	validates :uid, :uniqueness => true
 	#after_save :create_bottle_holders, :on => :create
-
-	def self.default_ml_to_ms(n_bot)
-		[{'low' => 58, 'med' => 58, 'high' => 58}]*n_bot
-	end
 
 	def create_bottle_holders
 		self.n_bottles.times do |t|
@@ -28,18 +22,16 @@ class Dispenser < ActiveRecord::Base
 		data['wine_names'] = []
 		data['wine_details'] = []
 		data['remaining_volumes'] = []
-		self.bottle_holders.reverse.each_with_index do |bh, index|
-			data['serving_options'][index] = {}
+		self.bottle_holders.each do |bh|
+			data['serving_options'][bh.dispenser_index] = {}
 
-			data['serving_options'][index]['low'] = {:price=>bh.serving_price_low,:volume=>bh.serving_volume_low}
-			data['serving_options'][index]['med'] = {:price=>bh.serving_price_med,:volume=>bh.serving_volume_med}
-			data['serving_options'][index]['high'] = {:price=>bh.serving_price_high,:volume=>bh.serving_volume_high}
-			data['wine_names'][index] = (bh.wine ? bh.wine.name : 'Vacio')
-			data['wine_details'][index] = (bh.wine ? bh.wine.variety + ' ' + bh.wine.vintage.to_s : '')
-			data['remaining_volumes'][index] = bh.remaining_volume
+			data['serving_options'][bh.dispenser_index]['low'] = {:price=>bh.serving_price_low,:volume=>bh.serving_volume_low}
+			data['serving_options'][bh.dispenser_index]['med'] = {:price=>bh.serving_price_med,:volume=>bh.serving_volume_med}
+			data['serving_options'][bh.dispenser_index]['high'] = {:price=>bh.serving_price_high,:volume=>bh.serving_volume_high}
+			data['wine_names'][bh.dispenser_index] = (bh.wine ? bh.wine.name : 'Vacio')
+			data['wine_details'][bh.dispenser_index] = (bh.wine ? bh.wine.variety + ' ' + bh.wine.vintage.to_s : '')
+			data['remaining_volumes'][bh.dispenser_index] = bh.remaining_volume
 		end
-
-		data['ml_to_ms'] = self.ml_to_ms
 
 
 		data['temperatures'] = []
@@ -49,8 +41,6 @@ class Dispenser < ActiveRecord::Base
 		end
 
 		p data.to_json
-		p "Printing ip"
-		p self.ip
 		RestClient.post(self.ip + ':3001',data.to_json + "\n",:content_type => :json, :accept => :json)
 	end
 	def shutdown
